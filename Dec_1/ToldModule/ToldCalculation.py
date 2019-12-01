@@ -15,8 +15,9 @@ def RequiredFuelCalc(mass : Union[int, float]):
     return requiredFuel
 
 
-# def BatchRequiredFuelCalc(inputData : List[Union[int, float]]):
-def BatchRequiredFuelCalc(inputData):
+# =======================================================================================
+
+def BatchRequiredFuelCalcFirstPoll(inputData):
     if inputData == None:
         raise ValueError('ERROR :: "inputData" list was None!')
     if isinstance(inputData, list) == False:
@@ -35,9 +36,43 @@ def BatchRequiredFuelCalc(inputData):
 
     return calculatedFuelRequirements
 
+# =======================================================================================
+# =======================================================================================
+
+def BatchRequiredFuelCalcSecondPoll(inputData):
+    if inputData == None:
+        raise ValueError('ERROR :: "inputData" list was None!')
+    if isinstance(inputData, list) == False:
+        raise ValueError('ERROR :: "inputData" list is not of type "List[int]" or "List[float]"!')
+
+    calculatedFuelRequirements = []
+
+    for mass in inputData:
+        if isinstance(mass, str):
+            validatedMass = float(mass)
+        else:
+            validatedMass = mass
+
+        requiredFuel = __FuelRequirementRecurssive(validatedMass)
+        calculatedFuelRequirements.append(requiredFuel)
+
+    return calculatedFuelRequirements
 
 
-# def TotalFuelCalc(fuelRequirements : List[Union[int, float]]):
+def __FuelRequirementRecurssive(mass):
+    result = __FuelCalcFormula(mass)
+
+    if result <= 0:
+        return 0
+    else:
+        result += __FuelRequirementRecurssive(result)
+
+    return result
+
+# =======================================================================================
+
+
+
 def TotalFuelCalc(fuelRequirements):
     if fuelRequirements == None:
         raise ValueError('ERROR :: "fuelRequirements" list was None!')

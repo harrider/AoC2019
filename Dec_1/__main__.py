@@ -1,22 +1,31 @@
 import os
+import json
 from FileIoModule.TextFileReader import TextFileReader
-from ToldModule.ToldCalculation import RequiredFuelCalc, BatchRequiredFuelCalc, TotalFuelCalc
+from ToldModule.ToldCalculation import RequiredFuelCalc, BatchRequiredFuelCalcFirstPoll, BatchRequiredFuelCalcSecondPoll, TotalFuelCalc
 
 # Main
 if __name__ == '__main__':
+    
+    # Read in app configs
+    appsettingsJsonFilePath = os.path.join(os.getcwd(), 'appsettings.json')
+    with open(appsettingsJsonFilePath, 'r') as settingsFile:
+        configs = json.load(settingsFile)
 
     # Create the filepath to the input file
-    textFilePath = os.path.join(os.getcwd(), 'Input.txt')
+    inputTextFilePath = os.path.join(os.getcwd(), 'Input.txt')
     
     # Create a 'TextFileReader' object
-    textFileReader = TextFileReader(textFilePath)
+    textFileReader = TextFileReader(inputTextFilePath)
 
     # Read the data from the input file
     inputData = textFileReader.Read()
 
     # Calculate a list of fuel requirements based on mass of each module
-    fuelRequirements = BatchRequiredFuelCalc(inputData)
-
+    if configs['UseSecondPollFuelCalculation']:
+        fuelRequirements = BatchRequiredFuelCalcSecondPoll(inputData)
+    else:
+        fuelRequirements = BatchRequiredFuelCalcFirstPoll(inputData)
+        
     # Calculate the total fuel requirement as the sum of fuel requirements for all modules
     totalFuelRequirement = TotalFuelCalc(fuelRequirements)
 
