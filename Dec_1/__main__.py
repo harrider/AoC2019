@@ -11,8 +11,18 @@ if __name__ == '__main__':
     with open(appsettingsJsonFilePath, 'r') as settingsFile:
         configs = json.load(settingsFile)
 
+        if configs == None:
+            raise ValueError('ERROR :: Problem reading "appsettings.json"!')
+        if isinstance(configs['DataInputFileName'], str) == False:
+            raise ValueError('ERROR :: appsettings parameter "DataInputFileName" must be of type "str"!')
+        if configs['DataInputFileName'].lower().endswith('.txt') == False:
+            raise ValueError('ERROR :: appsettings parameter "DataInputFileName" must a ".txt" file!')
+        if isinstance(configs['UseSecondPollFuelCalculation'], bool) == False:
+            raise ValueError('ERROR :: appsettings parameter "UseSecondPollFuelCalculation" must be of type "bool"!')
+
+
     # Create the filepath to the input file
-    inputTextFilePath = os.path.join(os.getcwd(), 'Input.txt')
+    inputTextFilePath = os.path.join(os.getcwd(), configs['DataInputFileName'])
     
     # Create a 'TextFileReader' object
     textFileReader = TextFileReader(inputTextFilePath)
