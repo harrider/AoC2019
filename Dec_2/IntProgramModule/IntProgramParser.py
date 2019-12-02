@@ -7,11 +7,11 @@ class IntProgramParser:
         if isinstance(initialCounterValue, int) == False:
             raise TypeError('ERROR :: "initialCounterValue" must be of type "Int"!')
         if initialCounterValue < 0:
-                raise ValueError('ERROR :: "initialCounterValue" must be a positive number!')
+            raise ValueError('ERROR :: "initialCounterValue" must be a positive number!')
         if isinstance(opcodeProgramSpan, int) == False:
             raise TypeError('ERROR :: "opcodeProgramSpan" must be of type "Int"!') 
         if opcodeProgramSpan < 0:
-                raise ValueError('ERROR :: "opcodeProgramSpan" must be a positive number!')
+            raise ValueError('ERROR :: "opcodeProgramSpan" must be a positive number!')
 
         self.opcodeCounter = initialCounterValue
         self.opcodeProgramSpan = opcodeProgramSpan
