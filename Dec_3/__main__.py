@@ -44,7 +44,7 @@ def GetClosestIntersectionPoint(originPosition, intersectionPositions):
     for position in intersectionPositions:
         distance = CalculateDistance(originPosition, position)
 
-        print(f'Current Intersection Point: {position} and distance: {distance}')
+        # print(f'Current Intersection Point: {position} and distance: {distance}')
 
         if distance < closestDistance[1]:
             closestDistance = (position, distance)
@@ -106,6 +106,8 @@ if __name__ == "__main__":
     originPosition = (0, 0)
     wirePathInstructionLists = []
 
+    print('Running...')
+
     # Iterate through each wire's list of wirepath instructions
     for wirePath in wirePaths:
 
@@ -145,8 +147,13 @@ if __name__ == "__main__":
             # currentPosition = GeneratePositionFromInstruction(currentPosition, instructionTuple)
             updatedCurrentPosition = GeneratePositionFromInstruction(currentPosition, instructionTuple)
 
+
             # Add newly update current position to the current wire's wirepath position list
-            currentWirePathPositionList.append(currentPosition)
+            distance = instructionTuple[1]
+            # ====================================================
+            # currentWirePathPositionList.append((currentPosition, distance))           # This line will generate the correct 'closest intersection point', but wrong step count
+            currentWirePathPositionList.append((updatedCurrentPosition, distance))      # This line will generate the correct 'step count', but wrong closest intersection point
+            # ====================================================
 
             # Update current position reference
             currentPosition = updatedCurrentPosition
@@ -172,10 +179,10 @@ if __name__ == "__main__":
                 for rightIndex in range(0, len(rightWirePositionList)-1):
 
                     # Define the points necessary for the 2 line segments
-                    a1 = leftWirePositionList[leftIndex]
-                    a2 = leftWirePositionList[leftIndex + 1]
-                    b1 = rightWirePositionList[rightIndex]
-                    b2 = rightWirePositionList[rightIndex + 1]
+                    a1 = leftWirePositionList[leftIndex][0]
+                    a2 = leftWirePositionList[leftIndex + 1][0]
+                    b1 = rightWirePositionList[rightIndex][0]
+                    b2 = rightWirePositionList[rightIndex + 1][0]
 
                     # Calculate the intersection point between 2 line segments
                     # position with ('inf', 'inf') indicates parallel lines
@@ -197,7 +204,73 @@ if __name__ == "__main__":
     # Calculate the closest intersection point to the origin position
     closestDistance = GetClosestIntersectionPoint(originPosition, wirePathPositionIntersections)
 
+    # Print the closest intersection point
     print(f'Closest intersection point: {closestDistance}')
+
+    # Create a list to store the lists of intersection points and step counts for each wire
+    wirePathsIntersectionPointAndStepCountList = []
+
+    # Iterate through c wirepath position lists
+    for wirePathPositionList in wirePathPositionLists:
+        # Initialize step count to 0
+        stepCount = 0
+
+        # Create a list to store intersection points and step counts for each wire
+        currentWirePathIntersectionPointAndStepCountList = []
+
+        # Iterate through the current wire's wire path segments
+        for index in range(0, len(wirePathPositionList)-1):
+            # Get the start and stop point for the current line segment
+            legStartPosition = wirePathPositionList[index][0]
+            legStopPosition = wirePathPositionList[index+1][0]
+
+            # Update the total step count up to the current start point
+            stepCount += wirePathPositionList[index][1]
+
+            # Iterate through list of intersection positions
+            for intersectionPoint in wirePathPositionIntersections:
+
+                # If the current intersection point is on the current leg segment
+                if IsBetween(legStartPosition, legStopPosition, intersectionPoint):
+                    # calculate the distance from the start point to the intersection point
+                    stepDistanceToIntersection = np.abs(intersectionPoint[0] - legStartPosition[0]) + np.abs(intersectionPoint[1] - legStartPosition[1])
+
+                    # Add that distance to the total step count up to the leg segment's start point
+                    intersectionStepDistance = stepCount + stepDistanceToIntersection
+
+                    # Add leg segment and step count up to the intersection point to the list
+                    currentWirePathIntersectionPointAndStepCountList.append(((intersectionPoint[0], intersectionPoint[1]), intersectionStepDistance))
+
+        # Add the current wire's list of intersection points and step counts to the overall list
+        wirePathsIntersectionPointAndStepCountList.append(currentWirePathIntersectionPointAndStepCountList)
+
+    # Set the minimum steps required and corresponding intersection point to infinity
+    minimumDelayIntersectionPoint = ((float('inf'), float('inf')), float('inf'))
+
+    # Iterate through wire 1's list of intersection points and step counts
+    for x in wirePathsIntersectionPointAndStepCountList[0]:
+
+        # Iterate through wire 2's list of intersection points and step counts
+        for y in wirePathsIntersectionPointAndStepCountList[1]:
+
+            # If the current intersection point in wire2's list is the same as the current intersection point in wire1's list
+            if (x[0][0] == y[0][0]) and (x[0][1] == y[0][1]):
+                
+                # Calculate the sum of the step counts for both wires up to the current intersection point
+                localSum = x[1] + y[1]
+
+                # If the sum of the current intersection point's step counts is less than the current minimum required step count
+                if localSum < minimumDelayIntersectionPoint[1]:
+
+                    # Update the minimum required step count
+                    minimumDelayIntersectionPoint = (y[0], localSum)
+
+
+    # Print the minimum required step count and the corresponding intersection point
+    print(f'Intersection with Minimum Delay: ({minimumDelayIntersectionPoint[0]}), # of Step: {minimumDelayIntersectionPoint[1]}')
+
+
+
 
 
     # print(f'Example use of GetIntersect (Parallel Lines): {GetIntersect((0, 1), (0, 2), (1, 10), (1, 9))}')
