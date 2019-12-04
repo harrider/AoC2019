@@ -3,6 +3,7 @@ from SecurityModule.PasswordRuleSet import PasswordRuleSet
 from SecurityModule.PasswordRule_NDigitPassword import PasswordRule_NDigitPassword
 from SecurityModule.PasswordRule_NeverDecrease import PasswordRule_NeverDecrease
 from SecurityModule.PasswordRule_TwoAdjacentDigits import PasswordRule_TwoAdjacentDigits
+from SecurityModule.PasswordRule_ExactlyTwoAdjacentDigits import PasswordRule_ExactlyTwoAdjacentDigits
 from SecurityModule.PasswordRule_WithinRange import PasswordRule_WithinRange
 
 if __name__ == '__main__':
@@ -15,12 +16,17 @@ if __name__ == '__main__':
     passwordLength = settings['PasswordLength']
     passwordRangeLowerLimit = settings['PasswordRange']['LowerLimit']
     passwordRangeUpperLimit = settings['PasswordRange']['UpperLimit']
+    useExactlyTwoAdjacentDigitsRule = settings['UseExactlyTwoAdjacentDigitsRule']
 
     # Create password rule objects
     rule_SixDigitPassword = PasswordRule_NDigitPassword(passwordLength)
     rule_WithinRange = PasswordRule_WithinRange(passwordRangeLowerLimit, passwordRangeUpperLimit)
     rule_DigitsNeverDecrease = PasswordRule_NeverDecrease()
-    rule_TwoAdjacentDigitsEqual = PasswordRule_TwoAdjacentDigits()
+
+    if useExactlyTwoAdjacentDigitsRule:
+        rule_TwoAdjacentDigitsEqual = PasswordRule_ExactlyTwoAdjacentDigits()
+    else:
+        rule_TwoAdjacentDigitsEqual = PasswordRule_TwoAdjacentDigits()
 
     # Create list of rules
     ruleList = [
@@ -36,13 +42,13 @@ if __name__ == '__main__':
     # Initialize # of valid passwords to 0
     validPasswords = 0
 
+    print('Running...')
+
     # Iterate through all passwords within the given range from the 'appsettings.json' file
     for password in range(passwordRangeLowerLimit, passwordRangeUpperLimit):
 
         # If the current password has been validated by all password rules
         if passwordRuleSet.Validate(password):
-            print(f'Valid password found: {password}')
-            
             # Increment # of valid passwords counter
             validPasswords += 1
 
