@@ -7,24 +7,24 @@ class ModifiedIntProgramParser:
     opcodeLength = 2
 
 
-    def __init__(self, initialCounterValue, opcodeProgramSpanDict):
-        if isinstance(initialCounterValue, int) == False:
-            raise TypeError('ERROR :: "initialCounterValue" must be of type "Int"!')
-        if initialCounterValue < 0:
-            raise ValueError('ERROR :: "initialCounterValue" must be a positive number!')
+    def __init__(self, initialInstructionPointerValue, opcodeProgramSpanDict):
+        if isinstance(initialInstructionPointerValue, int) == False:
+            raise TypeError('ERROR :: "initialInstructionPointerValue" must be of type "Int"!')
+        if initialInstructionPointerValue < 0:
+            raise ValueError('ERROR :: "initialInstructionPointerValue" must be a positive number!')
         if isinstance(opcodeProgramSpanDict, dict) == False:
             raise TypeError('ERROR :: "opcodeProgramSpanDict" must be of type "dict"!')
         if len(opcodeProgramSpanDict) == 0:
             raise ValueError('ERROR :: "opcodeProgramSpanDict" dictionary is EMPTY!')
 
-        self.opcodeCounter = initialCounterValue
+        self.instructionPointer = initialInstructionPointerValue
         self.opcodeProgramSpanDict = opcodeProgramSpanDict
 
 
     def Parse(self, opcodes : []):
         stepSize = 1
 
-        currentOpcodeAndModes = opcodes[self.opcodeCounter]
+        currentOpcodeAndModes = opcodes[self.instructionPointer]
         currentOpcodeAndModesStr = str(currentOpcodeAndModes)
 
         currentOpcode = currentOpcodeAndModes % 100
@@ -38,7 +38,7 @@ class ModifiedIntProgramParser:
 
         opcodeProgramSpan = self.opcodeProgramSpanDict[currentOpcode]
 
-        startLocation = self.opcodeCounter
+        startLocation = self.instructionPointer
         stopLocation = startLocation + opcodeProgramSpan
 
         rawOpCodeProgram = opcodes[startLocation : stopLocation : stepSize]
@@ -66,7 +66,7 @@ class ModifiedIntProgramParser:
                 else:
                     parameter_Params[index] = (positionModeDefaultValue, parameter_Params[index])
 
-            self.opcodeCounter += opcodeProgramSpan
+            self.instructionPointer += opcodeProgramSpan
 
             opcodeProgram = OpcodeProgram(
                 parameter_Opcode,
@@ -74,3 +74,7 @@ class ModifiedIntProgramParser:
             )
 
         return opcodeProgram
+
+
+    def UpdateInstructionPointer(self, instructionPointerPosition : int):
+        self.instructionPointer = instructionPointerPosition

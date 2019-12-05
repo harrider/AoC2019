@@ -7,6 +7,10 @@ from IntProgramModule.OpcodeProgramsModule.Opcode_1 import Opcode_1
 from IntProgramModule.OpcodeProgramsModule.Opcode_2 import Opcode_2
 from IntProgramModule.OpcodeProgramsModule.Opcode_3 import Opcode_3
 from IntProgramModule.OpcodeProgramsModule.Opcode_4 import Opcode_4
+from IntProgramModule.OpcodeProgramsModule.Opcode_5 import Opcode_5
+from IntProgramModule.OpcodeProgramsModule.Opcode_6 import Opcode_6
+from IntProgramModule.OpcodeProgramsModule.Opcode_7 import Opcode_7
+from IntProgramModule.OpcodeProgramsModule.Opcode_8 import Opcode_8
 from IntProgramModule.OpcodeProgramsModule.Opcode_99 import Opcode_99
 
 
@@ -50,28 +54,40 @@ if __name__ == '__main__':
 
         intProgramCode.append(validatedX)
 
+    #====================
+    # Compose program
+    #====================
+
+    # Create Opcode objects
+    opcode_1 = Opcode_1(4)
+    opcode_2 = Opcode_2(4)
+    opcode_3 = Opcode_3(2)
+    opcode_4 = Opcode_4(2)
+    opcode_5 = Opcode_5(3)
+    opcode_6 = Opcode_6(3)
+    opcode_7 = Opcode_7(4)
+    opcode_8 = Opcode_8(4)
+    opcode_99 = Opcode_99(1)
+
     # Create Opcode Program Span Dictionary
     opcodeProgramSpanDict = {
-        1 : 4,
-        2 : 4,
-        3 : 2,
-        4 : 2,
-        99 : 1
+        1 : opcode_1.opcodeProgramSpan,
+        2 : opcode_2.opcodeProgramSpan,
+        3 : opcode_3.opcodeProgramSpan,
+        4 : opcode_4.opcodeProgramSpan,
+        5 : opcode_5.opcodeProgramSpan,
+        6 : opcode_6.opcodeProgramSpan,
+        7 : opcode_7.opcodeProgramSpan,
+        8 : opcode_8.opcodeProgramSpan,
+        99 : opcode_99.opcodeProgramSpan
     }
 
-    # Compose program
+    # Create an IntProgramParser object
     if settings_useModifiedIntProgramParser:
         programParser = ModifiedIntProgramParser(0, opcodeProgramSpanDict)
     else:
         programParser = IntProgramParser(0, opcodeProgramSpanDict)
 
-    # Create Opcode objects
-    opcode_1 = Opcode_1()
-    opcode_2 = Opcode_2()
-    opcode_3 = Opcode_3()
-    opcode_4 = Opcode_4()
-    opcode_99 = Opcode_99()
-    
     # Set Program Clock
     if settings_resetProgramClock:
         noun = settings_initialNoun
@@ -81,7 +97,7 @@ if __name__ == '__main__':
         intProgramCode[2] = verb
 
     # Print initial state of the IntProgram
-    if settings_showFinalIntProgramCode:
+    if settings_showInitialIntProgramCode:
         print(f'Opcode Program: {intProgramCode}')
 
     # Parse the first Opcode Program to Run from the IntCode Program input
@@ -102,6 +118,18 @@ if __name__ == '__main__':
         # Else If Opcode = 4
         elif currentOpcodeProgram.opcode == 4:
             opcode_4.Execute(currentOpcodeProgram, intProgramCode)
+        # Else If Opcode = 5
+        elif currentOpcodeProgram.opcode == 5:
+            opcode_5.Execute(currentOpcodeProgram, intProgramCode, programParser)
+        # Else If Opcode = 6
+        elif currentOpcodeProgram.opcode == 6:
+            opcode_6.Execute(currentOpcodeProgram, intProgramCode, programParser)
+        # Else If Opcode = 7
+        elif currentOpcodeProgram.opcode == 7:
+            opcode_7.Execute(currentOpcodeProgram, intProgramCode)
+        # Else If Opcode = 8
+        elif currentOpcodeProgram.opcode == 8:
+            opcode_8.Execute(currentOpcodeProgram, intProgramCode)
         # Else, this is an unknown Opcode
         else:
             raise ValueError(f'ERROR :: opcode "{currentOpcodeProgram.opcode}" is INVALID!')

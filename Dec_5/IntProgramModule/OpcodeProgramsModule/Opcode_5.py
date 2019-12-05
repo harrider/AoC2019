@@ -1,7 +1,8 @@
 from IntProgramModule.OpcodeProgram import OpcodeProgram
+from IntProgramModule.ModifiedIntProgramParser import ModifiedIntProgramParser
 
 
-class Opcode_4:
+class Opcode_5:
 
     def __init__(self, opcodeProgramSpan : int):
         if isinstance(opcodeProgramSpan, int) == False:
@@ -12,10 +13,13 @@ class Opcode_4:
         self.opcodeProgramSpan = opcodeProgramSpan
 
     
-    def Execute(self, opcodeProgram : OpcodeProgram, opcodes : []):
+    def Execute(self, opcodeProgram : OpcodeProgram, opcodes : [], programParser : ModifiedIntProgramParser):
         
         param1 = opcodeProgram.params[0]
-        
-        result = param1[1] if param1[0] == 1 else opcodes[param1[1]]
+        param2 = opcodeProgram.params[1]
 
-        print(f'Opcode 4: {result}')
+        input1 = param1[1] if param1[0] == 1 else opcodes[param1[1]]
+        input2 = param2[1] if param2[0] == 1 else opcodes[param2[1]]
+        
+        if input1 != 0:
+            programParser.UpdateInstructionPointer(input2)
