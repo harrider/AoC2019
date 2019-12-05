@@ -9,7 +9,9 @@ class Opcode_3:
     
     def Execute(self, opcodeProgram : OpcodeProgram, opcodes : []):
         
-        outputLocation = opcodeProgram.params[0]
+        param1 = opcodeProgram.params[0]
+        
+        outputLocation = param1[1]
                
         userInput = input('Input an integer value: ')
 
