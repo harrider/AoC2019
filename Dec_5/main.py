@@ -1,6 +1,5 @@
 import os
 from IntProgramModule.IntProgramParser import IntProgramParser
-from IntProgramModule.IntProgramUpdater import IntProgramUpdater
 from IntProgramModule.OpcodeProgram import OpcodeProgram
 from IntProgramModule.OpcodeProgramsModule.Opcode_1 import Opcode_1
 from IntProgramModule.OpcodeProgramsModule.Opcode_2 import Opcode_2
@@ -38,8 +37,8 @@ if __name__ == '__main__':
         intProgramCode.append(validatedX)
 
     # Reset '1202' program clock
-    intProgramCode[1] = 12
-    intProgramCode[2] = 2
+    # intProgramCode[1] = 12
+    # intProgramCode[2] = 2
     # intProgramCode[1] = iterNoun
     # intProgramCode[2] = iterVerb
 
@@ -54,15 +53,13 @@ if __name__ == '__main__':
     }
 
     # Compose program
-    # programParser = IntProgramParser(0, 4)
     programParser = IntProgramParser(0, opcodeProgramSpanDict)
-    programUpdater = IntProgramUpdater()
 
     # Create Opcode objects
     opcode_1 = Opcode_1()
     opcode_2 = Opcode_2()
-    # opcode_3 = Opcode_3()
-    # opcode_4 = Opcode_4()
+    opcode_3 = Opcode_3()
+    opcode_4 = Opcode_4()
     opcode_99 = Opcode_99()
 
 
@@ -77,16 +74,19 @@ if __name__ == '__main__':
     
         # If Opcode = 1
         if currentOpcodeProgram.opcode == 1:
-            currentOpcodeProgram = opcode_1.Execute(currentOpcodeProgram, intProgramCode)
+            opcode_1.Execute(currentOpcodeProgram, intProgramCode)
         # Else If Opcode = 2
         elif currentOpcodeProgram.opcode == 2:
-            currentOpcodeProgram = opcode_2.Execute(currentOpcodeProgram, intProgramCode)
+            opcode_2.Execute(currentOpcodeProgram, intProgramCode)
+        # Else If Opcode = 3
+        elif currentOpcodeProgram.opcode == 3:
+            opcode_3.Execute(currentOpcodeProgram, intProgramCode)
+        # Else If Opcode = 4
+        elif currentOpcodeProgram.opcode == 4:
+            opcode_4.Execute(currentOpcodeProgram, intProgramCode)
         # Else, this is an unknown Opcode
         else:
             raise ValueError(f'ERROR :: opcode "{currentOpcodeProgram.opcode}" is INVALID!')
-
-        # Update the IntProgramCode
-        intProgramCode = programUpdater.Update(intProgramCode, currentOpcodeProgram)
 
         # Parse the next Opcode Program
         currentOpcodeProgram = programParser.Parse(intProgramCode)
@@ -99,6 +99,7 @@ if __name__ == '__main__':
 
     # Print current program output
     print(f'Program Output: {currentOutput}')
+    print(f'Program Code: {intProgramCode}')
 
     # Exiting the program
     print('\nExiting program...')

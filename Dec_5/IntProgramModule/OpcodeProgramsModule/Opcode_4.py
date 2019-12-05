@@ -9,18 +9,8 @@ class Opcode_4:
     
     def Execute(self, opcodeProgram : OpcodeProgram, opcodes : []):
         
-        userInput = input('Input an integer value: ')
+        outputLocation = opcodeProgram.params[0]
 
-        
+        result = opcodes[outputLocation]
 
-        # result = opcodes[opcodeProgram.input1] * opcodes[opcodeProgram.input2]
-
-        # opcodeProgramResult = OpcodeProgram(
-        #     opcodeProgram.opcode, 
-        #     opcodeProgram.input1, 
-        #     opcodeProgram.input2, 
-        #     opcodeProgram.outputLocation, 
-        #     result
-        # )
-
-        # return opcodeProgramResult
+        print(f'Opcode 4: {result}')

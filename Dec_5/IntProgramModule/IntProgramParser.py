@@ -36,14 +36,10 @@ class IntProgramParser:
         if len(rawOpCodeProgram) < opcodeProgramSpan:
             parameter_Opcode = 99
             parameter_Params = []
-            parameter_OutputLocation = 0
-            parameter_OutputValue = 0
 
             opcodeProgram = OpcodeProgram(
                 parameter_Opcode,
-                parameter_Params,
-                parameter_OutputLocation,
-                parameter_OutputValue
+                parameter_Params
             )
         else:
             opcodePosition = 0
@@ -51,21 +47,15 @@ class IntProgramParser:
             paramEndPosition = len(rawOpCodeProgram) - 1 
 
             parameter_Opcode = rawOpCodeProgram[opcodePosition]
-            parameter_Params = rawOpCodeProgram[paramStartPosition : paramEndPosition : stepSize]
+            parameter_Params = rawOpCodeProgram[paramStartPosition : len(rawOpCodeProgram) : stepSize]
 
             # TODO - REMOVE AFTER REFACTOR
             for param in parameter_Params:
                 print(f'Current Param: {param}')
 
-            # TODO - PUSH THIS INTO PARAMS
-            parameter_OutputLocation = rawOpCodeProgram[len(rawOpCodeProgram) - 1]
-            parameter_OutputValue = 0
-
             opcodeProgram = OpcodeProgram(
                 parameter_Opcode,
-                parameter_Params,
-                parameter_OutputLocation,
-                parameter_OutputValue
+                parameter_Params
             )
 
             self.opcodeCounter += opcodeProgramSpan

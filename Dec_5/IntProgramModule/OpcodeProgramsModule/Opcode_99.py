@@ -8,21 +8,22 @@ class Opcode_99:
 
     
     def Execute(self, opcodeProgram : OpcodeProgram, opcodes : []):
+        pass
+    
+        # parameter_Opcode = opcodeProgram.opcode
 
-        parameter_Opcode = opcodeProgram.opcode
+        # parameter_Params = []
+        # parameter_Params[0] = opcodeProgram.params[0]
+        # parameter_Params[1] = opcodeProgram.params[1]
 
-        parameter_Params = []
-        parameter_Params[0] = opcodeProgram.params[0]
-        parameter_Params[1] = opcodeProgram.params[1]
+        # parameter_OutputLocation = opcodeProgram.outputLocation
+        # parameter_OutputValue = 0
 
-        parameter_OutputLocation = opcodeProgram.outputLocation
-        parameter_OutputValue = 0
+        # opcodeProgramResult = OpcodeProgram(
+        #     parameter_Opcode, 
+        #     parameter_Params,
+        #     parameter_OutputLocation, 
+        #     parameter_OutputValue
+        # )
 
-        opcodeProgramResult = OpcodeProgram(
-            parameter_Opcode, 
-            parameter_Params,
-            parameter_OutputLocation, 
-            parameter_OutputValue
-        )
-
-        return opcodeProgramResult
+        # return opcodeProgramResult

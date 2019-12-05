@@ -9,22 +9,10 @@ class Opcode_1:
     
     def Execute(self, opcodeProgram : OpcodeProgram, opcodes : []):
         
-        result = opcodes[opcodeProgram.params[0]] + opcodes[opcodeProgram.params[1]]
+        input1 = opcodeProgram.params[0]
+        input2 = opcodeProgram.params[1]
+        outputLocation = opcodeProgram.params[2]
 
-        parameter_Opcode = opcodeProgram.opcode
+        result = opcodes[input1] + opcodes[input2]
 
-        parameter_Params = []
-        parameter_Params.append(opcodeProgram.params[0])
-        parameter_Params.append(opcodeProgram.params[1])
-
-        parameter_OutputLocation = opcodeProgram.outputLocation
-        parameter_OutputValue = result
-
-        opcodeProgramResult = OpcodeProgram(
-            parameter_Opcode, 
-            parameter_Params,
-            parameter_OutputLocation, 
-            parameter_OutputValue
-        )
-
-        return opcodeProgramResult
+        opcodes[outputLocation] = result
